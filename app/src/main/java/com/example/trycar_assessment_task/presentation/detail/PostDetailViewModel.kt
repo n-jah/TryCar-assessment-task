@@ -26,16 +26,9 @@ class PostDetailViewModel @Inject constructor(
 ) : ViewModel() {
     
     private val postId: Int = savedStateHandle.get<Int>("postId") ?: 0
-    private val postTitle: String = savedStateHandle.get<String>("postTitle") ?: ""
-    private val postBody: String = savedStateHandle.get<String>("postBody") ?: ""
-    private val postUserId: Int = savedStateHandle.get<Int>("postUserId") ?: 0
     
-    val post = Post(
-        id = postId,
-        userId = postUserId,
-        title = postTitle,
-        body = postBody
-    )
+    private val _post = MutableStateFlow<Post?>(null)
+    val post: StateFlow<Post?> = _post.asStateFlow()
     
     private val _commentsState = MutableStateFlow<Resource<List<Comment>>>(Resource.Loading())
     val commentsState: StateFlow<Resource<List<Comment>>> = _commentsState.asStateFlow()
@@ -48,8 +41,21 @@ class PostDetailViewModel @Inject constructor(
     
     init {
         Log.d(TAG, "PostDetailViewModel initialized for postId: $postId")
+        loadPost()
         loadComments()
         checkIfFavorite()
+    }
+    
+    private fun loadPost() {
+        Log.d(TAG, "Loading post $postId")
+        viewModelScope.launch {
+            postsRepository.getPosts().collect { resource ->
+                if (resource is Resource.Success) {
+                    _post.value = resource.data?.find { it.id == postId }
+                    Log.d(TAG, "Post loaded: ${_post.value?.title}")
+                }
+            }
+        }
     }
     
     private fun loadComments() {
@@ -77,6 +83,8 @@ class PostDetailViewModel @Inject constructor(
     fun toggleFavorite() {
         Log.d(TAG, "toggleFavorite called for post $postId")
         viewModelScope.launch {
+            val currentPost = _post.value ?: return@launch
+            
             if (_isFavorite.value) {
                 Log.d(TAG, "Removing post $postId from favorites")
                 favoritesRepository.removeFromFavorites(postId)
@@ -85,9 +93,9 @@ class PostDetailViewModel @Inject constructor(
             } else {
                 Log.d(TAG, "Adding post $postId to favorites")
                 val favoritePost = FavoritePostEntity(
-                    id = post.id,
-                    title = post.title,
-                    body = post.body,
+                    id = currentPost.id,
+                    title = currentPost.title,
+                    body = currentPost.body,
                     isSynced = false
                 )
                 favoritesRepository.addToFavorites(favoritePost)

@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
@@ -18,19 +19,34 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = Primary,
     onPrimary = Color.White,
+    primaryContainer = Color(0xFFEEF2FF),
+    onPrimaryContainer = Color(0xFF1E3A8A),
+    
+    secondary = Secondary,
     onSecondary = Color.White,
+    secondaryContainer = Color(0xFFE8F8F2),
+    onSecondaryContainer = Color(0xFF0F5132),
+    
+    tertiary = Color(0xFFB794F6),
     onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    
+    error = Error,
+    onError = Color.White,
+    errorContainer = Color(0xFFFFE5E5),
+    onErrorContainer = Color(0xFF8B0000),
+    
+    background = Background,
+    onBackground = Color(0xFF2D3748),
+    
+    surface = Surface,
+    onSurface = Color(0xFF2D3748),
+    surfaceVariant = Color(0xFFF7FAFC),
+    onSurfaceVariant = Color(0xFF64748B),
+    
+    outline = Color(0xFFE2E8F0),
+    outlineVariant = Color(0xFFF1F5F9)
 )
 
 @Composable
@@ -53,6 +69,7 @@ fun TryCarassessmenttaskTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        shapes = Shapes,
         content = content
     )
 }

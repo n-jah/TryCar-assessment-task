@@ -70,29 +70,23 @@ fun NavGraph() {
             composable(Screen.Posts.route) {
                 PostsScreen(
                     onPostClick = { post ->
-                        navController.navigate(
-                            Screen.PostDetail.createRoute(
-                                postId = post.id,
-                                postTitle = post.title,
-                                postBody = post.body,
-                                postUserId = post.userId
-                            )
-                        )
+                        navController.navigate(Screen.PostDetail.createRoute(post.id))
                     }
                 )
             }
 
             composable(Screen.Favorites.route) {
-                FavoritesScreen()
+                FavoritesScreen(
+                    onPostClick = { postId ->
+                        navController.navigate(Screen.PostDetail.createRoute(postId))
+                    }
+                )
             }
 
             composable(
                 route = Screen.PostDetail.route,
                 arguments = listOf(
-                    navArgument("postId") { type = NavType.IntType },
-                    navArgument("postTitle") { type = NavType.StringType },
-                    navArgument("postBody") { type = NavType.StringType },
-                    navArgument("postUserId") { type = NavType.IntType }
+                    navArgument("postId") { type = NavType.IntType }
                 )
             ) {
                 PostDetailScreen(
@@ -114,12 +108,12 @@ sealed class Screen(val route: String, val title: String, val icon: androidx.com
     data object Posts : Screen("posts", "Posts", Icons.Default.List)
     data object Favorites : Screen("favorites", "Favorites", Icons.Default.Favorite)
     data object PostDetail : Screen(
-        "post_detail/{postId}/{postTitle}/{postBody}/{postUserId}",
+        "post_detail/{postId}",
         "Post Detail",
         Icons.Default.List
     ) {
-        fun createRoute(postId: Int, postTitle: String, postBody: String, postUserId: Int): String {
-            return "post_detail/$postId/${java.net.URLEncoder.encode(postTitle, "UTF-8")}/${java.net.URLEncoder.encode(postBody, "UTF-8")}/$postUserId"
+        fun createRoute(postId: Int): String {
+            return "post_detail/$postId"
         }
     }
 }

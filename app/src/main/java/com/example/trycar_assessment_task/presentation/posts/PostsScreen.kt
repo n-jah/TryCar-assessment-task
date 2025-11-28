@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trycar_assessment_task.presentation.components.PostItem
@@ -30,6 +31,20 @@ fun PostsScreen(
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { 
+                    Text(
+                        "Posts",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold
+                    ) 
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
+            )
+        },
         floatingActionButton = {
             if (postsState is Resource.Success || postsState is Resource.Error) {
                 FloatingActionButton(
