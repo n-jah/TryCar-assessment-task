@@ -1,5 +1,6 @@
 package com.example.trycar_assessment_task.presentation.posts
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trycar_assessment_task.Network.INetworkConnectivityObserver
@@ -30,22 +31,31 @@ class PostsViewModel @Inject constructor(
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
     
     init {
+        Log.d(TAG, "PostsViewModel initialized")
         observeNetworkConnectivity()
         loadPosts()
     }
     
     private fun observeNetworkConnectivity() {
+        Log.d(TAG, "Starting network connectivity observation")
         viewModelScope.launch {
             networkObserver.observeNetworkConnectivity()
                 .collect { isAvailable ->
+                    Log.d(TAG, "Network connectivity changed: $isAvailable")
                     _isNetworkAvailable.value = isAvailable
                 }
         }
     }
     
     fun loadPosts(forceRefresh: Boolean = false) {
+        Log.d(TAG, "loadPosts called - forceRefresh: $forceRefresh")
         viewModelScope.launch {
             postsRepository.getPosts(forceRefresh).collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> Log.d(TAG, "Posts loading...")
+                    is Resource.Success -> Log.d(TAG, "Posts loaded successfully: ${resource.data?.size} posts")
+                    is Resource.Error -> Log.e(TAG, "Posts loading failed: ${resource.message}")
+                }
                 _postsState.value = resource
                 if (resource !is Resource.Loading) {
                     _isRefreshing.value = false
@@ -55,7 +65,12 @@ class PostsViewModel @Inject constructor(
     }
     
     fun refresh() {
+        Log.d(TAG, "Manual refresh triggered")
         _isRefreshing.value = true
         loadPosts(forceRefresh = true)
+    }
+
+    companion object {
+        private const val TAG = "PostsViewModel"
     }
 }

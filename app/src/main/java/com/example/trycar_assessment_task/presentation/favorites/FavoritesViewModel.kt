@@ -1,5 +1,6 @@
 package com.example.trycar_assessment_task.presentation.favorites
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trycar_assessment_task.Network.INetworkConnectivityObserver
@@ -31,16 +32,20 @@ class FavoritesViewModel @Inject constructor(
     val isNetworkAvailable: StateFlow<Boolean> = _isNetworkAvailable.asStateFlow()
     
     init {
+        Log.d(TAG, "FavoritesViewModel initialized")
         observeNetworkConnectivity()
         syncFavoritesWhenOnline()
     }
     
     private fun observeNetworkConnectivity() {
+        Log.d(TAG, "Starting network connectivity observation")
         viewModelScope.launch {
             networkObserver.observeNetworkConnectivity()
                 .collect { isAvailable ->
+                    Log.d(TAG, "Network connectivity changed: $isAvailable")
                     _isNetworkAvailable.value = isAvailable
                     if (isAvailable) {
+                        Log.d(TAG, "Network available, triggering sync")
                         syncFavorites()
                     }
                 }
@@ -48,22 +53,34 @@ class FavoritesViewModel @Inject constructor(
     }
     
     private fun syncFavoritesWhenOnline() {
+        Log.d(TAG, "Checking if initial sync is needed")
         viewModelScope.launch {
             if (networkObserver.isNetworkAvailable()) {
+                Log.d(TAG, "Network available, performing initial sync")
                 syncFavorites()
+            } else {
+                Log.d(TAG, "Network not available, skipping initial sync")
             }
         }
     }
     
     private fun syncFavorites() {
+        Log.d(TAG, "Syncing favorites...")
         viewModelScope.launch {
             favoritesRepository.syncFavorites()
+            Log.d(TAG, "Favorites sync completed")
         }
     }
     
     fun removeFromFavorites(postId: Int) {
+        Log.d(TAG, "Removing post $postId from favorites")
         viewModelScope.launch {
             favoritesRepository.removeFromFavorites(postId)
+            Log.d(TAG, "Post $postId removed")
         }
+    }
+
+    companion object {
+        private const val TAG = "FavoritesViewModel"
     }
 }

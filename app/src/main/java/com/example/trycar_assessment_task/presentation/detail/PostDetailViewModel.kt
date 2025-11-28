@@ -1,5 +1,6 @@
 package com.example.trycar_assessment_task.presentation.detail
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -46,31 +47,43 @@ class PostDetailViewModel @Inject constructor(
     val showSuccessMessage: SharedFlow<String> = _showSuccessMessage.asSharedFlow()
     
     init {
+        Log.d(TAG, "PostDetailViewModel initialized for postId: $postId")
         loadComments()
         checkIfFavorite()
     }
     
     private fun loadComments() {
+        Log.d(TAG, "Loading comments for post $postId")
         viewModelScope.launch {
             _commentsState.value = Resource.Loading()
             val result = postsRepository.getComments(postId)
+            when (result) {
+                is Resource.Success -> Log.d(TAG, "Comments loaded: ${result.data?.size} comments")
+                is Resource.Error -> Log.e(TAG, "Failed to load comments: ${result.message}")
+                else -> {}
+            }
             _commentsState.value = result
         }
     }
     
     private fun checkIfFavorite() {
+        Log.d(TAG, "Checking if post $postId is favorite")
         viewModelScope.launch {
             _isFavorite.value = favoritesRepository.isFavorite(postId)
+            Log.d(TAG, "Post $postId favorite status: ${_isFavorite.value}")
         }
     }
     
     fun toggleFavorite() {
+        Log.d(TAG, "toggleFavorite called for post $postId")
         viewModelScope.launch {
             if (_isFavorite.value) {
+                Log.d(TAG, "Removing post $postId from favorites")
                 favoritesRepository.removeFromFavorites(postId)
                 _isFavorite.value = false
                 _showSuccessMessage.emit("Removed from favorites")
             } else {
+                Log.d(TAG, "Adding post $postId to favorites")
                 val favoritePost = FavoritePostEntity(
                     id = post.id,
                     title = post.title,
@@ -82,5 +95,9 @@ class PostDetailViewModel @Inject constructor(
                 _showSuccessMessage.emit("Added to favorites")
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "PostDetailViewModel"
     }
 }
