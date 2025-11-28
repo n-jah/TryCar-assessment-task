@@ -1,4 +1,4 @@
-package com.example.try_car_test.presentation.posts
+package com.example.trycar_assessment_task.presentation.posts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
