@@ -84,27 +84,6 @@ Get the latest APK from the [Releases](../../releases) page.
 | Navigation | Navigation Compose |
 | Testing | JUnit |
 
-## 📦 Dependencies
-
-```kotlin
-// Core
-- Kotlin 2.0.21
-- Compose BOM 2024.09.00
-- Material Design 3
-
-// Architecture
-- Hilt 2.51.1
-- Lifecycle ViewModel Compose 2.8.7
-- Navigation Compose 2.8.5
-
-// Data
-- Room 2.6.1
-- Retrofit 2.11.0
-- OkHttp 4.12.0
-
-// Async
-- Coroutines 1.8.0
-```
 
 ## 📂 Project Structure
 
@@ -177,62 +156,6 @@ git clone https://github.com/yourusername/posts-app.git
 cd posts-app
 ```
 
-2. **Open in Android Studio**
-   - File → Open → Select project folder
-
-3. **Sync Gradle**
-   - Wait for Gradle sync to complete
-
-4. **Run the app**
-   - Click Run button or press Shift+F10
-   - Select emulator or connected device
-
-### Build APK
-
-```bash
-# Debug APK
-./gradlew assembleDebug
-
-# Release APK (signed)
-./gradlew assembleRelease
-```
-
-**APK Location**: `app/build/outputs/apk/debug/app-debug.apk`
-
-### Create Release
-
-1. **Build Release APK**
-```bash
-./gradlew assembleRelease
-```
-
-2. **Create GitHub Release**
-   - Go to repository → Releases → Create new release
-   - Tag version (e.g., v1.0.0)
-   - Upload APK file
-   - Add release notes
-
-### Add Screenshots
-
-1. **Take Screenshots**
-   - Posts screen
-   - Detail screen with comments
-   - Favorites screen
-   - Offline mode indicator
-
-2. **Record GIF**
-   - Use Android Studio's screen recorder
-   - Or use ADB: `adb shell screenrecord /sdcard/demo.mp4`
-   - Convert to GIF using online tools
-
-3. **Add to Repository**
-```bash
-mkdir screenshots
-# Add your images: posts_screen.png, detail_screen.png, favorites_screen.png, app_demo.gif
-git add screenshots/
-git commit -m "Add screenshots and demo"
-git push
-```
 
 ## 🧪 Testing
 
@@ -247,12 +170,6 @@ git push
   - Repository pattern
   - Network observer
   - Data flow
-
-### View Test Results
-```bash
-# Open HTML report
-start app/build/reports/tests/testDebugUnitTest/index.html
-```
 
 ## 📋 Requirements Checklist
 
@@ -314,15 +231,11 @@ start app/build/reports/tests/testDebugUnitTest/index.html
 - Faster app performance
 - Reduced network calls
 
-## 📝 Notes
 
-- **Min SDK**: 24 (Android 7.0)
-- **Target SDK**: 36 (Android 14)
-- **Compile SDK**: 36
 
 ## 👨‍💻 Author
 
-Ahmed - Android Developer
+Ahmed Nagah Elhag  - Android Developer
 
 Built as an assessment task demonstrating:
 - Modern Android development
