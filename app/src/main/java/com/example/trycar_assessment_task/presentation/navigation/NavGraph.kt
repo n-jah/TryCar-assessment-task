@@ -2,8 +2,8 @@ package com.example.trycar_assessment_task.presentation.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -105,12 +105,12 @@ private val bottomNavItems = listOf(
 
 // Screen definitions
 sealed class Screen(val route: String, val title: String, val icon: androidx.compose.ui.graphics.vector.ImageVector) {
-    data object Posts : Screen("posts", "Posts", Icons.Default.List)
+    data object Posts : Screen("posts", "Posts", Icons.AutoMirrored.Filled.List)
     data object Favorites : Screen("favorites", "Favorites", Icons.Default.Favorite)
     data object PostDetail : Screen(
         "post_detail/{postId}",
         "Post Detail",
-        Icons.Default.List
+        Icons.AutoMirrored.Filled.List
     ) {
         fun createRoute(postId: Int): String {
             return "post_detail/$postId"

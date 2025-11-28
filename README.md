@@ -17,7 +17,7 @@ A modern Android application built with Jetpack Compose that displays posts and 
 <p align="center">
   <img src="screenshots/online posts.jpg" width="250" alt="Posts List" />
   <img src="screenshots/online post details.jpg" width="250" alt="Post Details" />
-  <img src="screenshots/online post details 2.jpg" width="250" alt="Comments" />
+  <img src="screenshots/online post datails and comments.jpg" width="250" alt="Comments" />
 </p>
 
 #### Offline Mode
